@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    integrity="sha512-baxB/HV16TkBHy6Dg8M79SCGlv6oLpCKC/Joa5H4SSz7r0ZF4RHJrh8p+9S3GrfoeOst9dyeGOpqiNIVBae1jA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Food and Drink List</title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      overflow-x: auto;
+    }
+
+    .sidebar {
+      background-color: #343a40;
+      color: #ffffff;
+      height: 100vh;
+      width: 300px;
+      /* Sesuaikan lebar navbar */
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+    }
+
+    .content-wrapper {
+      margin-left: 300px;
+      /* Sesuaikan margin untuk mengakomodasi lebar navbar */
+      transition: margin-left 0.5s;
+      /* Animasi jika diperlukan */
+    }
+
+
+    .content {
+      padding: 20px;
+    }
+
+    .item-box {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .remove-btn {
+      cursor: pointer;
+    }
+
+    .dropbtn {
+      background-color: #3498DB;
+      color: white;
+      padding: 16px;
+      width: 275px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .dropbtn:hover,
+    .dropbtn:focus {
+      background-color: #2980B9;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #ddd;
+    }
+
+    .show {
+      display: block;
+    }
+
+    .list-group-item {
+      background-color: #3498DB;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+    }
+
+    .card {
+      margin: 5px;
+      transition: transform 0.5s;
+    }
+
+    .card:hover {
+      transform: scale(1.1);
+    }
+
+    .item-list {
+      height: 575px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div>
+    <nav class="navbar navbar-expand-md bg-primary navbar-nav">
+      <div class="container-fluid">
+        <span class="navbar-text fst-italic fs-3">Starbhak Mart</span>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container-fluid d-flex">
+    <div class="row">
+      <nav class="col-2 bg-secondary ">
+        <div class="sidebar-sticky" >
+          <h5 class="my-4">Food And Drinks</h5>
+
+          <div class="dropdown">
+            <select class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            style="margin-left: 35px;">
+            <option value="Takeaway" style="text-align: center;">Take Away</option>
+            <option value="Dine in" style="text-align: center;">Dine in</option>
+            <option value="Delivery" style="text-align: center;">Delivery</option>
+            </select>
+          <br>
+          <br>
+          <ul class="list-group">
+            <i class="fa-solid fa-user"></i>
+            <div class="list-group-item bg-primary" style="text-align: center;">MangIbing</div>
+          </ul>
+          <hr>
+          <div>
+            <h2 style="text-align: center;">Keranjang</h2>
+            <div class="item-list bg-light mt-2 overflow-auto">
+              <div class="ms-2 mt-2 me-2 mb-2" id="sidebarList" > 
+
+              </div>
+            </div>
+            
+            <br><br>
+            <p id="">pajak 10%</p>
+            <p id="totaldanpajak">Total + Pajak = </p>
+          </div>
+          <button type="button" class="btn btn-danger" style="width: 190px; margin-left: 10px;"
+            onclick="buy()">"ctrl + P"</button>
+          <div class="card-nav mt-2"></div>
+        </div>
+      </nav>
+      <main role="main" class="col-md-9 col-lg-10 px-500">
+        <div class="card-list">
+          <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand">Menu</a>
+              <form class="d-flex" onsubmit="searchMenu(); return false;">
+                <button><img src="Keranjang.png" alt="..." style="height: 50px; margin-right: 12px;"></button>
+                <input id="searchInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+            </div>
+          </nav>
+          <hr>
+          <div class="row">
+            <div class="col-md-9 d-flex">
+              <div class="card" style="width: 12rem;">
+                <img src="EggSandwich.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" id="menu">Egg Sandwich</h5>
+                  <p class="card-text">Rp.10.000</p>
+                  <button class="btn btn-success" onclick="addToSidebar(this)" ondblclick="tampilkanQty(this)">Add</button>
+                </div>
+              </div>
+              <div class="card" style="width: 12rem;">
+                <img src="CheesyPepperoni.jpg" class="card-img-top" alt="..." style="height: 150px;">
+                <div class="card-body">
+                  <h5 class="card-title" id="menu">Chessy Pepperoni</h5>
+                  <p class="card-text">Rp.20.000</p>
+                  <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+                </div>
+              </div>
+              <div class="card" style="width: 12rem;">
+                <img src="BurgerKomplit.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" id="menu">Burger Complete</h5>
+                  <p class="card-text">Rp.15.000</p>
+                  <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+                </div>
+              </div>
+              <div class="card" style="width: 12rem;">
+                <img src="BurgerKejuKomplit.jpg" class="card-img-top" alt="..." style="height: 150px;">
+                <div class="card-body">
+                  <h5 class="card-title" id="menu">Burger Cheese Full</h5>
+                  <p class="card-text">Rp.17.000</p>
+                  <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+                </div>
+              </div>
+              <div class="card" style="width: 12rem;">
+                <img src="LemonTea.jpg" class="card-img-top" alt="..." style="height: 150px;">
+                <div class="card-body">
+                  <h5 class="card-title" id="menu">Ice Lemon Tea</h5>
+                  <p class="card-text">Rp.5.000</p>
+                  <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <main class="card-list">
+          <div class="row">
+            <div class="col-md-9 d-flex flex-row">
+              <div class="card" style="width: 12rem;">
+                <img src="AyamGeprek.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title" id="menu">Ayam Geprek</h5>
+                  <p class="card-text">Rp.15.000</p>
+                  <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+                </div>
+              </div>
+              <div class="card" style="width: 12rem;">
+                <img src="AyamGoreng.jpg" class="card-img-top" alt="..." style="height: 125px;">
+                <div class="card-body">
+                  <h5 class="card-title" id="menu">Fried Chicken</h5>
+                  <p class="card-text">Rp.12.000</p>
+                  <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+                </div>
+              </div>
+              <div class="card" style="width: 12rem;">
+                <img src="KebabArab.jpg" class="card-img-top" alt="..." style="height: 125px;">
+                <div class="card-body">
+                  <h5 class="card-title" id="menu">Spicy Kebab Arab</h5>
+                  <p class="card-text">Rp.8.000</p>
+                  <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+                </div>
+              </div>
+              <div class="card" style="width: 12rem;">
+                <img src="CaramelMacchiato.jpg" class="card-img-top" alt="..." style="height: 125px;">
+                <div class="card-body">
+                  <h5 class="card-title" id="menu">Caramel Macchiato</h5>
+                  <p class="card-text">Rp.10.000</p>
+                  <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+                </div>
+              </div>
+              <div class="card" style="width: 12rem;">
+                <img src="SpaghettiCarbonara.jpeg" class="card-img-top" alt="..." style="height: 125px;">
+                <div class="card-body">
+                  <h5 class="card-title" id="menu">Spaghetti Carbonara</h5>
+                  <p class="card-text">Rp.15.000</p>
+                  <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+                </div>
+              </div>
+            </div>
+        </main>
+        <div class="row">
+          <div class="col-md-9 d-flex flex-row">
+            <div class="card" style="width: 12rem;">
+              <img src="BatagorKuah.jpeg" class="card-img-top" alt="..." style="height: 125px;">
+              <div class="card-body">
+                <h5 class="card-title" id="menu">Batagor Kuah</h5>
+                <p class="card-text">Rp.10.000</p>
+                <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+              </div>
+            </div>
+            <div class="card" style="width: 12rem;">
+              <img src="FrechFries.jpg" class="card-img-top" alt="..." style="height: 125px;">
+              <div class="card-body">
+                <h5 class="card-title" id="menu">French Fries + Sauce</h5>
+                <p class="card-text">Rp.8.000</p>
+                <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+              </div>
+            </div>
+            <div class="card" style="width: 12rem;">
+              <img src="ManggoJuice.jpeg" class="card-img-top" alt="..." style="height: 125px;">
+              <div class="card-body">
+                <h5 class="card-title" id="menu">Juice Manggo</h5>
+                <p class="card-text">Rp.5.000</p>
+                <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+              </div>
+            </div>
+            <div class="card" style="width: 12rem;">
+              <img src="MieAyam.jpeg" class="card-img-top" alt="..." style="height: 125px;">
+              <div class="card-body">
+                <h5 class="card-title" id="menu">Mie Ayam Komplit </h5>
+                <p class="card-text">Rp.12.000</p>
+                <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+              </div>
+            </div>
+            <div class="card" style="width: 12rem;">
+              <img src="TomahawkSteak.jpeg" class="card-img-top" alt="..." style="height: 125px;">
+              <div class="card-body">
+                <h5 class="card-title" id="menu">Grilled Tomahawk</h5>
+                <p class="card-text">Rp.900.000</p>
+                <button class="btn btn-success" onclick="addToSidebar(this)">Add</button>
+              </div>
+            </div>
+          </div>
+          <footer>
+            <div class="container" style="margin-top: -15px;">
+              <div class="row justify-content-end">
+                <div class="col-md-10" style="margin-top: -35px;">
+                  <div class="text-end">
+                    <button class="btn btn-primary btn-lg" onclick="processPayment()">
+                      Process Payment
+                  </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div>
+    <nav class="navbar navbar-expand-md bg-primary navbar-nav">
+      <div class="container-fluid">
+        <span class="navbar-text fst-italic fs-3">Thank You for buying</span>
+      </div>
+    </nav>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-rbsU5fYZn5zgAq6fptRXOhXh+1FC7STC8P1pE93kEFZDr2/V3pI4dI+oTnMVvXHj"
+    crossorigin="anonymous"></script>
+
+  <script>
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    window.onclick = function (event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
+    var total = 0;
+    // Deklarasikan variabel total sebagai variabel global
+    function addToSidebar(button) {
+      var sidebarList = document.getElementById("sidebarList");
+
+      var cardBody = button.parentNode;
+      var menu = cardBody.querySelector(".card-title").textContent;
+      var hargaText = cardBody.querySelector(".card-text").textContent;
+      var harga = parseInt(hargaText.replace("Rp.", "").replace(",", ""));
+      var qty = 1; // Set default quantity to 1
+
+      // Cek apakah item sudah ada di sidebar
+      var existingItem = findExistingItem(menu);
+      if (existingItem) {
+        // Jika item sudah ada, tambahkan kuantitas
+        existingItem.qty++;
+        existingItem.element.textContent = menu + " (x" + existingItem.qty + ") Rp." + (harga * existingItem.qty).toLocaleString() + ".000";
+        var deleteBtn = document.createElement("button");
+        deleteBtn.className = "btn btn-danger btn-sm ms-2";
+        deleteBtn.textContent = "Delete";
+        deleteBtn.onclick = function () {
+          deleteItem(this);
+        };
+        existingItem.element.appendChild(deleteBtn);
+      } else {
+        // Jika item belum ada, buat item baru
+        var listItem = document.createElement("li");
+        listItem.className = "list-group-item";
+        listItem.textContent = menu + " (x" + qty + ") Rp." + harga.toLocaleString() + ".000";
+
+        var deleteBtn = document.createElement("button");
+        deleteBtn.className = "btn btn-danger btn-sm ms-2";
+        deleteBtn.textContent = "Delete";
+        deleteBtn.onclick = function () {
+          deleteItem(this);
+        };
+        listItem.appendChild(deleteBtn);
+
+        sidebarList.appendChild(listItem);
+
+        // Simpan informasi item di dalam objek
+        var item = {
+          menu: menu,
+          harga: harga,
+          qty: qty,
+          element: listItem
+        };
+
+        sidebarItems.push(item); // Menambahkan item ke array sidebarItems
+      }
+
+      total += harga;
+
+      document.getElementById("totaldanpajak").textContent =
+        "Total + Pajak = Rp." + total.toLocaleString() + ".000";
+    }
+
+    function deleteItem(button) {
+      var item = button.parentNode;
+      var itemText = item.textContent;
+      var harga = parseInt(itemText.match(/Rp\.(\d+)/)[1].replace(/\./g, ""));
+
+      total += harga;
+
+      document.getElementById("totaldanpajak").textContent =
+        "Total + Pajak Rp." + total.toLocaleString() + ".000";
+      item.parentNode.removeChild(item);
+
+
+      var existingItem = findExistingItem(itemText);
+      if (existingItem) {
+        // Jika item ditemukan, kurangi kuantitas atau hapus jika kuantitas = 1
+        if (existingItem.qty > 1) {
+          existingItem.qty--;
+          existingItem.element.textContent = existingItem.menu + " (x" + existingItem.qty + ") Rp." + (existingItem.harga * existingItem.qty).toLocaleString() + ".000";
+        } else {
+          total -= existingItem.harga;
+          sidebarItems.splice(sidebarItems.indexOf(existingItem), 1); // Hapus item dari array
+          document.getElementById("totaldanpajak").textContent =
+            "Total + Pajak Rp." + total.toLocaleString() + ".000";
+          item.parentNode.removeChild(item);
+        }
+      }
+    }
+
+    // Mencari item di dalam array sidebarItems berdasarkan nama menu
+    function findExistingItem(menu) {
+      return sidebarItems.find(function (item) {
+        return item.menu === menu;
+      });
+    }
+
+    // Array untuk menyimpan informasi item di sidebar
+    var sidebarItems = [];
+
+      // Fungsi untuk membeli item dan menampilkan total dengan pajak
+    function processPayment() {
+      // Menghitung pajak 10%
+      var pajak = 0.1 * total;
+
+      // Menampilkan total dan pajak
+      var totalWithTax = Math.floor(total + pajak);
+      alert("Terimakasih Telah Membeli di Starbhak Mart " + "<------------------------------------------>" + "\nTotal pembelian (termasuk pajak 10%): Rp." + totalWithTax.toLocaleString("Tax") + ".000");
+
+      // Reset total ke 0 setelah pembelian
+      total = 0;
+
+      // Menghapus semua item di sidebar
+      var sidebarList = document.getElementById("sidebarList");
+      sidebarList.innerHTML = "";
+
+      // Memperbarui teks total
+      document.getElementById("total").textContent = "Total : ";
+    }
+
+    // Fungsi yang akan dijalankan saat Anda menekan CTRL + P
+    function readyPayment() {
+      processPayment(); // Panggil fungsi pembayaran saat tombol ditekan
+    }
+
+    // Mengatur shortcut keyboard Ctrl + P untuk memanggil fungsi pembayaran
+    document.addEventListener('keydown', function (event) {
+      if (event.ctrlKey && event.key === 'p') {
+        event.preventDefault(); // Menghentikan fungsi default (mencetak halaman)
+        readyPayment(); // Panggil fungsi pembayaran saat Ctrl + P ditekan
+      }
+    });
+
+    function searchMenu() {
+    var searchInput = document.getElementById("searchInput");
+    var keyword = searchInput.value.toLowerCase();
+
+    // Loop melalui semua elemen menu dan sembunyikan yang tidak sesuai dengan pencarian
+    var cards = document.querySelectorAll(".card");
+    cards.forEach(function (card) {
+        var menuName = card.querySelector(".card-title").textContent.toLowerCase();
+        if (menuName.includes(keyword)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+  }
+    
+  </script>
+</body>
+
+</html>
